@@ -1,0 +1,13 @@
+env_oulad/
+__pycache__/
+.ipynb_checkpoints/
+
+# Archivos de Datos Masivos (Locales, no van a la nube)
+*.csv
+*.zip
+*.rar
+*.sql
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
