@@ -6,8 +6,10 @@ __pycache__/
 *.csv
 *.zip
 *.rar
-*.sql
+*.pptx
+*.ppt
 
 # Archivos del sistema
 .DS_Store
 Thumbs.db
+.env

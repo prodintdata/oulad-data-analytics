@@ -1,0 +1,18 @@
+Documentación de Ingeniería de Características: Justificación de Codificación Ordinal
+
+Proyecto: Pipeline de Analítica Predictiva - Dataset OULAD
+Fase: Preparación de Datos para Modelado
+
+Para avanzar con los requerimientos del proyecto y preparar los datos de cara a los modelos predictivos y estadísticos, procedí a realizar la transformación de las variables alfanuméricas (texto) a un formato numérico mediante un proceso de Codificación Ordinal (Ordinal Encoding).
+
+A continuación, presento la justificación técnica de por qué este proceso se concentró exclusivamente en la tabla studentInfo:
+1.	Naturaleza de la Tabla studentInfo: Esta tabla representa la dimensión demográfica y cualitativa principal de todo el ecosistema de datos. Contiene variables que poseen una jerarquía o escala de intensidad natural y lógica de negocio (por ejemplo: a mayor nivel educativo o mayor rango de edad, existe una progresión cronológica y académica clara). Lo mismo ocurre con el nivel socioeconómico (imd_band) y el resultado final del estudiante (final_result), que actúa como nuestra variable objetivo.
+
+2.	Auditoría del resto de las tablas: Tras revisar minuciosamente las otras 6 tablas del dataset (courses, assessments, vle, studentRegistration, studentAssessment y studentVle), se determinó que no requieren transformaciones ordinales debido a lo siguiente:
+
+o	Las métricas de interacciones, notas, días de duración y fechas de inscripción ya son valores numéricos puros (INT o BIGINT) listos para el procesamiento matemático.
+
+o	Las columnas de texto restantes en esas tablas (como el tipo de evaluación o el tipo de recurso en la plataforma virtual) son de carácter nominal (no tienen un orden o rango de superioridad entre sí). Por estándar de ingeniería de datos, el tratamiento de estas variables nominales se realizará más adelante mediante One-Hot Encoding directamente en la etapa de entrenamiento del modelo, evitando sobrecargar el almacenamiento en la base de datos.
+
+Resultado de la Fase: Para no alterar ni corromper las tablas limpias originales de la base de datos relacional (manteniendo así la integridad de los datos para consultas tradicionales), el script de Python genera una nueva tabla enriquecida en MySQL llamada student_analytics. Esta tabla actúa como un "espejo" que conserva las llaves relacionales originales para permitir cualquier cruce de datos futuro, pero añade al final las columnas codificadas numéricamente, dejando el dataset listo al 100% para la fase de Machine Learning.
+
