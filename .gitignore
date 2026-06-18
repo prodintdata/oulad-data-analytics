@@ -8,9 +8,7 @@ __pycache__/
 *.rar
 *.pptx
 *.ppt
-*.png
-*.jpg
-*.jpeg
+
 
 # Archivos del sistema
 .DS_Store

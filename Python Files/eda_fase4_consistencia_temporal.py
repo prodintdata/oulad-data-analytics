@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 from sqlalchemy import create_engine
 from scipy import stats
-import scikit_posthocs as sp  # Librería especializada para el Test de Dunn
+import scikit_posthocs as sp 
 import matplotlib.pyplot as plt
 import seaborn as sns
 from dotenv import load_dotenv
