@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.manifold import MDS
 import matplotlib.pyplot as plt
 import seaborn as sns
-from skbio.stats.distance import permanova
+from skbio.stats.distance import permanova, permdisp # <-- Importamos permdisp de skbio
 from skbio import DistanceMatrix  
 
 def ejecutar_analisis_multivariante_permanova():
@@ -23,7 +23,6 @@ def ejecutar_analisis_multivariante_permanova():
     contrasena = os.getenv("DB_PASSWORD")
     servidor = os.getenv("DB_HOST")
     base_datos = os.getenv("DB_NAME")
-    
     
     puerto_env = os.getenv("DB_PORT")
     puerto = int(puerto_env) if puerto_env is not None else 3306
@@ -38,7 +37,6 @@ def ejecutar_analisis_multivariante_permanova():
     variables_y = ['total_clicks_plataforma', 'nota_promedio', 'porcentaje_entregas_a_tiempo']
     columna_grupo = 'final_result' 
 
-    
     sns.set_theme(style="whitegrid")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
     
@@ -64,7 +62,7 @@ def ejecutar_analisis_multivariante_permanova():
     print(f"Muestra estratificada optimizada con éxito a n = {df_muestra.shape[0]} estudiantes.")
 
     # ==============================================================================
-    # 3. AUDITORÍA ESTADÍSTICA DE SUPUESTOS
+    # 3. AUDITORÍA ESTADÍSTICA DE SUPUESTOS UNIVARIADOS
     # ==============================================================================
     print("\n" + "=" * 75)
     print(" FASE 1: AUDITORÍA DE SUPUESTOS PARAMÉTRICOS ")
@@ -77,7 +75,7 @@ def ejecutar_analisis_multivariante_permanova():
         status = "RECHAZADA (No es Normal)" if p_val < 0.01 else "ACEPTADA (Es Normal)"
         print(f"  * {var:<30} -> p-value: {p_val:.5e} | Distribución Normal: {status}")
 
-    print("\n[B] Evaluando Homogeneidad de Varianzas Inter-grupo (Test de Levene):")
+    print("\n[B] Evaluando Homogeneidad de Varianzas Inter-grupo Univariadas (Test de Levene):")
     grupos_unicos = df_muestra[columna_grupo].unique()
     for var in variables_y:
         listas_grupos = [df_muestra[df_muestra[columna_grupo] == g][var] for g in grupos_unicos]
@@ -115,8 +113,30 @@ def ejecutar_analisis_multivariante_permanova():
     print(f" Valor de Significancia (p-value)    : {res_global['p-value']:.5e}")
     print(f" Número de Permutaciones Ejecutadas   : {res_global['number of permutations']}")
 
+    # ==============================================================================
+    # NUEVA FASE: AUDITORÍA DE HOMOGENEIDAD DE LA DISPERSIÓN MULTIVARIANTE (PERMDISP)
+    # ==============================================================================
+    print("\n" + "=" * 75)
+    print(" FASE CORRELATIVA: AUDITORÍA DE DISPERSIÓN MULTIVARIANTE (PERMDISP) ")
+    print("=" * 75)
+    print("Evaluando si la dispersión interna de las cohortes es equivalente...")
+    
+    res_permdisp = permdisp(matriz_distancias, grupos_lista, permutations=9999)
+    
+    print(f" Estadístico F de PERMDISP            : {res_permdisp['test statistic']:.4f}")
+    print(f" Valor de Significancia (p-value)    : {res_permdisp['p-value']:.5e}")
+    
+    if res_permdisp['p-value'] < 0.01:
+        print("\n[ALERTA COHORTE]: p-value < 0.01 en PERMDISP.")
+        print("La dispersión multivariante NO es homogénea entre los grupos.")
+        print("Nota: El resultado de PERMANOVA podría verse afectado por diferencias en la variabilidad interna")
+        print("y no únicamente por el desplazamiento de los centroides.")
+    else:
+        print("\n[OK]: Homocedasticidad Multivariante Aceptada. La dispersión de los grupos es equivalente.")
+
+
     if res_global['p-value'] < 0.01:
-        print("\nDECISIÓN ESTADÍSTICA:")
+        print("\nDECISIÓN ESTADÍSTICA FINAL (PERMANOVA):")
         print(f"p-value < 0.01. Se RECHAZA la Hipótesis Nula (H0).")
         print("El perfil combinado de clics, notas y puntualidad difiere entre los grupos.")
         
