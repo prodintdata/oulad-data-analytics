@@ -114,7 +114,7 @@ def ejecutar_analisis_multivariante_permanova():
     print(f" Número de Permutaciones Ejecutadas   : {res_global['number of permutations']}")
 
     # ==============================================================================
-    # NUEVA FASE: AUDITORÍA DE HOMOGENEIDAD DE LA DISPERSIÓN MULTIVARIANTE (PERMDISP)
+    # AUDITORÍA DE HOMOGENEIDAD DE LA DISPERSIÓN MULTIVARIANTE (PERMDISP)
     # ==============================================================================
     print("\n" + "=" * 75)
     print(" FASE CORRELATIVA: AUDITORÍA DE DISPERSIÓN MULTIVARIANTE (PERMDISP) ")
