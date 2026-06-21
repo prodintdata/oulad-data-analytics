@@ -108,6 +108,34 @@ print(f"Capacidad de Discriminación Global (AUC-ROC): {auc:.4f}")
 # ======================================================================
 # GRÁFICOS
 # ======================================================================
+
+print("\nGenerando mapa de calor para la Matriz de Confusión...")
+
+etiquetas_heatmap = np.array([
+    [f"Verdaderos Negativos\n(Éxito Correcto)\n{cm[0,0]}", f"Falsos Positivos\n(Falsa Alerta)\n{cm[0,1]}"],
+    [f"Falsos Negativos\n(Peligro Omitido)\n{cm[1,0]}", f"Verdaderos Positivos\n(Alerta Efectiva)\n{cm[1,1]}"]
+])
+
+plt.figure(figsize=(7.5, 5.5))
+sns.set_theme(style="white")
+
+sns.heatmap(cm, annot=etiquetas_heatmap, fmt="", cmap="Oranges", cbar=True,
+            xticklabels=['Predicción Estable (0)', 'Predicción Riesgo (1)'],
+            yticklabels=['Estatus Real Estable (0)', 'Estatus Real Riesgo (1)'],
+            annot_kws={"fontsize": 10, "weight": "bold"})
+
+plt.title("Matriz de Confusión - Modelo Base (EDA 7)", fontsize=11, pad=15)
+plt.xlabel("Predicción del Sistema (SAT)", fontsize=10, labelpad=8)
+plt.ylabel("Realidad Académica del Estudiante", fontsize=10, labelpad=8)
+plt.tight_layout()
+
+nombre_cm_base = f"sat_base_matriz_confusion_{timestamp}.png"
+plt.savefig(os.path.join(ruta_graficos, nombre_cm_base), dpi=300)
+plt.close()
+print(f"[OK] Mapa de calor exportado exitosamente en: Graficos/{nombre_cm_base}")
+
+sns.set_theme(style="whitegrid")
+
 print("\nGenerando gráficos de diagnóstico predictivo...")
 
 # --- IMPORTANCIA DE VARIABLES ---

@@ -143,34 +143,42 @@ auc_opt = roc_auc_score(y_test, y_prob)
 print(f"Nueva Capacidad de Discriminación Global (AUC-ROC): {auc_opt:.4f}")
 
 # ======================================================================
-# EXPORTACIÓN DE DIAGNÓSTICOS GRÁFICOS
+# BLOQUE INYECTADO: GENERACIÓN DE LA MATRIZ DE CONFUSIÓN EN ALTA CALIDAD
 # ======================================================================
-# --- IMPORTANCIA DE VARIABLES OPTIMIZADA ---
-print("\nGenerando mapa de calor para la Matriz de Confusión...")
+print("\nGenerando mapa de calor para la Matriz de Confusión Optimizada...")
 
+# Estructuración de las etiquetas con descripciones de negocio para tu tesis
 etiquetas_heatmap = np.array([
     [f"Verdaderos Negativos\n(Éxito Correcto)\n{cm[0,0]}", f"Falsos Positivos\n(Falsa Alerta)\n{cm[0,1]}"],
     [f"Falsos Negativos\n(Peligro Omitido)\n{cm[1,0]}", f"Verdaderos Positivos\n(Alerta Efectiva)\n{cm[1,1]}"]
 ])
 
 plt.figure(figsize=(7.5, 5.5))
+# Forzamos un estilo limpio de fondo blanco para el renderizado
 sns.set_theme(style="white")
 
-sns.heatmap(cm, annot=etiquetas_heatmap, fmt="", cmap="Oranges", cbar=True,
+sns.heatmap(cm, annot=etiquetas_heatmap, fmt="", cmap="Greens", cbar=True,
             xticklabels=['Predicción Estable (0)', 'Predicción Riesgo (1)'],
             yticklabels=['Estatus Real Estable (0)', 'Estatus Real Riesgo (1)'],
             annot_kws={"fontsize": 10, "weight": "bold"})
 
-plt.title("Matriz de Confusión - Modelo Base (EDA 8)", fontsize=11, pad=15)
+plt.title("Matriz de Confusión - Sistema Predictivo Optimizado (Fase 7 / 8)\nQuiebre del Mimetismo mediante Ingeniería de Características", fontsize=11, pad=15)
 plt.xlabel("Predicción del Sistema (SAT)", fontsize=10, labelpad=8)
 plt.ylabel("Realidad Académica del Estudiante", fontsize=10, labelpad=8)
 plt.tight_layout()
 
-nombre_cm_base = f"sat_optimizado_matriz_confusion_{timestamp}.png"
-plt.savefig(os.path.join(ruta_graficos, nombre_cm_base), dpi=300)
+nombre_cm_opt = f"sat_opt_matriz_confusion_{timestamp}.png"
+plt.savefig(os.path.join(ruta_graficos, nombre_cm_opt), dpi=300)
 plt.close()
-print(f"[OK] Mapa de calor exportado exitosamente en: Graficos/{nombre_cm_base}")
+print(f"[OK] Mapa de calor exportado exitosamente en: Graficos/{nombre_cm_opt}")
 
+# Regresamos el tema visual a whitegrid por si requieres otras gráficas después
+sns.set_theme(style="whitegrid")
+
+# ======================================================================
+# EXPORTACIÓN DE DIAGNÓSTICOS GRÁFICOS ORIGINALES
+# ======================================================================
+# --- IMPORTANCIA DE VARIABLES OPTIMIZADA ---
 plt.figure(figsize=(9, 5.5))
 importancias = pd.Series(modelo_opt.feature_importances_, index=X.columns).sort_values(ascending=True)
 importancias.plot(kind='barh', color='darkgreen')
@@ -194,4 +202,4 @@ plt.tight_layout()
 nombre_g2 = f"sat_opt_curva_roc_{timestamp}.png"
 plt.savefig(os.path.join(ruta_graficos, nombre_g2), dpi=300)
 plt.close()
-print(f"\nDiagnósticos gráficos guardados con éxito en la carpeta /Graficos.")
+print(f"Diagnósticos gráficos guardados con éxito en la carpeta /Graficos.")
