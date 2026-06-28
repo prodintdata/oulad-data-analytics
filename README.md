@@ -2,6 +2,12 @@
 
 Este repositorio contiene el pipeline de Ingeniería de Datos y Analítica Avanzada para el dataset **OULAD (Open University Learning Analytics dataset)**. El objetivo del proyecto es estructurar, limpiar e integrar los datos en un entorno relacional, aplicar ingeniería de características (transformaciones ordinales) y realizar un Análisis Exploratorio de Datos (EDA) extendido.
 
+Debido a las restricciones de tamaño de almacenamiento de la plataforma GitHub (límite de 100 MB por archivo) y considerando que la bitácora transaccional de interacciones (`studentVle.csv`) excede este volumen, los conjuntos de datos puros se encuentran alojados en un repositorio externo de alta disponibilidad.
+
+Si desea replicar el pipeline completo y poblar la base de datos local, por favor descargue los archivos CSV a través del siguiente enlace:
+
+**[Descargar Datasets Completos OULAD - Google Drive](https://drive.google.com/drive/folders/13m_DoOWtfxzlOTlMIDpd4gs_6ZjX8gQz?usp=sharing)**
+
 ---
 
 ## 📘 Diccionario de Datos del Proyecto
